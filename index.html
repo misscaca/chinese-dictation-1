@@ -1,29 +1,29 @@
 <!doctype html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>默書範圍　互動筆順練習（iPad 單頁版）</title>
+<title>默書範圍　互動筆順練習（手機＋iPad）</title>
 <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3/dist/hanzi-writer.min.js"></script>
 <style>
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;overflow:hidden}
-body{font-family:"Noto Sans CJK HK","PingFang HK","Microsoft JhengHei",sans-serif;background:linear-gradient(180deg,#eaf4ff,#fff7e6);color:#22303c;-webkit-user-select:none;user-select:none;display:flex;flex-direction:column}
-header{text-align:center;padding:8px 10px 4px}
-h1{font-size:clamp(20px,3.5vw,30px);margin:2px 0;color:#2b6cb0}
-.sub{font-size:clamp(12px,2vw,16px);color:#5a6b7a}
-main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px 14px 10px;min-height:0}
-.card{background:#fff;border:3px solid #ffd166;border-radius:20px;padding:10px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.08);display:flex;flex-direction:column;justify-content:center;min-height:0}
-.ctx{font-size:clamp(14px,2.2vw,20px);color:#4a5568;margin-bottom:4px}
-.char{font-size:clamp(60px,10vw,100px);line-height:1;color:#2b6cb0;cursor:pointer}
-#target{width:min(46vh,300px);height:min(46vh,300px);margin:6px auto;border:4px solid #63b3ed;border-radius:14px;background:#fff}
-.btns{margin-top:8px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
-button{font-size:clamp(14px,2vw,18px);padding:8px 14px;border-radius:12px;border:none;background:#2b6cb0;color:#fff;cursor:pointer}
+body{font-family:"Noto Sans CJK HK","PingFang HK","Microsoft JhengHei",sans-serif;background:linear-gradient(180deg,#eaf4ff,#fff7e6);color:#22303c;-webkit-user-select:none;user-select:none;display:flex;flex-direction:column;height:100dvh}
+header{text-align:center;padding:6px 10px 2px}
+h1{font-size:clamp(16px,4vw,26px);margin:2px 0;color:#2b6cb0}
+.sub{font-size:clamp(10px,2.5vw,15px);color:#5a6b7a}
+main{flex:1;display:flex;flex-direction:column;gap:6px;padding:4px 10px 6px;min-height:0}
+.card{background:#fff;border:3px solid #ffd166;border-radius:16px;padding:6px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.08);flex:0 0 auto}
+.ctx{font-size:clamp(11px,2.6vw,17px);color:#4a5568;margin-bottom:2px}
+.char{font-size:clamp(40px,10vw,72px);line-height:1;color:#2b6cb0;cursor:pointer}
+#target{width:min(34dvh,240px);height:min(34dvh,240px);margin:2px auto;border:3px solid #63b3ed;border-radius:12px;background:#fff}
+.btns{margin-top:4px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+button{font-size:clamp(11px,2.4vw,16px);padding:5px 10px;border-radius:10px;border:none;background:#2b6cb0;color:#fff;cursor:pointer}
 button.alt{background:#38a169}
 button.warn{background:#dd6b20}
-.practice{background:#fff;border:3px solid #f6ad55;border-radius:20px;padding:10px;box-shadow:0 6px 18px rgba(0,0,0,.08);display:flex;flex-direction:column;justify-content:center;min-height:0}
-.ptitle{font-size:clamp(16px,2.4vw,22px);margin-bottom:8px;color:#dd6b20}
-.squares{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.practice{background:#fff;border:3px solid #f6ad55;border-radius:16px;padding:6px;box-shadow:0 4px 14px rgba(0,0,0,.08);flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.ptitle{font-size:clamp(13px,2.8vw,19px);margin-bottom:4px;color:#dd6b20}
+.squares{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
 .sqwrap{text-align:center}
-canvas{width:min(24vh,170px);height:min(24vh,170px);border:4px solid #f6ad55;border-radius:12px;touch-action:none;background:#fff}
-.small{font-size:clamp(11px,1.8vw,14px);color:#718096;margin-top:6px}
-footer{display:flex;justify-content:center;gap:10px;padding:6px 0 10px}
+canvas{width:min(18dvh,130px);height:min(18dvh,130px);border:3px solid #f6ad55;border-radius:10px;touch-action:none;background:#fff}
+.small{font-size:clamp(9px,2vw,12px);color:#718096;margin-top:3px}
+footer{display:flex;justify-content:center;gap:8px;padding:3px 0 6px}
 </style></head><body>
 <header><h1>默書範圍　互動筆順練習</h1><div class="sub">一次只睇一個字；睇完筆順，用手指或 Apple Pencil 寫。</div></header>
 <main>

@@ -1,0 +1,135 @@
+<!doctype html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>默書範圍　互動筆順練習（iPad 單頁版）</title>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3/dist/hanzi-writer.min.js"></script>
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{font-family:"Noto Sans CJK HK","PingFang HK","Microsoft JhengHei",sans-serif;background:linear-gradient(180deg,#eaf4ff,#fff7e6);color:#22303c;-webkit-user-select:none;user-select:none;display:flex;flex-direction:column}
+header{text-align:center;padding:8px 10px 4px}
+h1{font-size:clamp(20px,3.5vw,30px);margin:2px 0;color:#2b6cb0}
+.sub{font-size:clamp(12px,2vw,16px);color:#5a6b7a}
+main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px 14px 10px;min-height:0}
+.card{background:#fff;border:3px solid #ffd166;border-radius:20px;padding:10px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.08);display:flex;flex-direction:column;justify-content:center;min-height:0}
+.ctx{font-size:clamp(14px,2.2vw,20px);color:#4a5568;margin-bottom:4px}
+.char{font-size:clamp(60px,10vw,100px);line-height:1;color:#2b6cb0;cursor:pointer}
+#target{width:min(46vh,300px);height:min(46vh,300px);margin:6px auto;border:4px solid #63b3ed;border-radius:14px;background:#fff}
+.btns{margin-top:8px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+button{font-size:clamp(14px,2vw,18px);padding:8px 14px;border-radius:12px;border:none;background:#2b6cb0;color:#fff;cursor:pointer}
+button.alt{background:#38a169}
+button.warn{background:#dd6b20}
+.practice{background:#fff;border:3px solid #f6ad55;border-radius:20px;padding:10px;box-shadow:0 6px 18px rgba(0,0,0,.08);display:flex;flex-direction:column;justify-content:center;min-height:0}
+.ptitle{font-size:clamp(16px,2.4vw,22px);margin-bottom:8px;color:#dd6b20}
+.squares{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.sqwrap{text-align:center}
+canvas{width:min(24vh,170px);height:min(24vh,170px);border:4px solid #f6ad55;border-radius:12px;touch-action:none;background:#fff}
+.small{font-size:clamp(11px,1.8vw,14px);color:#718096;margin-top:6px}
+footer{display:flex;justify-content:center;gap:10px;padding:6px 0 10px}
+</style></head><body>
+<header><h1>默書範圍　互動筆順練習</h1><div class="sub">一次只睇一個字；睇完筆順，用手指或 Apple Pencil 寫。</div></header>
+<main>
+  <div class="card">
+    <div class="ctx" id="ctx"></div>
+    <div class="char" id="bigchar" onmouseenter="speak()" onclick="speak()"></div>
+    <div id="target"></div>
+    <div class="btns">
+      <button onclick="speak()">🔊 讀</button>
+      <button class="alt" onclick="replay()">🔁 重播</button>
+      <button onclick="prev()">⬅️ 上一個</button>
+      <button onclick="next()">下一個 ➡️</button>
+    </div>
+  </div>
+  <div class="practice">
+    <div class="ptitle">✏️ 跟住寫（3 次）</div>
+    <div class="squares" id="squares"></div>
+    <div class="small">用手指或 Apple Pencil 寫；按「清除」可重寫。</div>
+  </div>
+</main>
+<footer>
+  <button class="warn" onclick="saveRecord()">📋 儲存紀錄並分享</button>
+</footer>
+<script>
+const seq=[{"char": "從", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "我", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "家", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "的", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "窗", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "口", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "望", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "出", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "去", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "會", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "看", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "到", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "一", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "棵", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "粗", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "壯", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "的", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "大", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "樹", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "他", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "長", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "得", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "真", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "高", "ctx": "從我家的窗口望出去，會看到一棵粗壯的大樹，他長得真高！"}, {"char": "小", "ctx": "小熊"}, {"char": "熊", "ctx": "小熊"}, {"char": "山", "ctx": "山洞"}, {"char": "洞", "ctx": "山洞"}, {"char": "蓋", "ctx": "蓋"}, {"char": "房", "ctx": "房子"}, {"char": "子", "ctx": "房子"}, {"char": "森", "ctx": "森林"}, {"char": "林", "ctx": "森林"}, {"char": "掌", "ctx": "掌門"}, {"char": "門", "ctx": "掌門"}, {"char": "葉", "ctx": "葉子"}, {"char": "子", "ctx": "葉子"}, {"char": "捨", "ctx": "捨不得"}, {"char": "不", "ctx": "捨不得"}, {"char": "得", "ctx": "捨不得"}, {"char": "砍", "ctx": "砍"}, {"char": "感", "ctx": "感激"}, {"char": "激", "ctx": "感激"}, {"char": "春", "ctx": "春天"}, {"char": "天", "ctx": "春天"}, {"char": "夏", "ctx": "夏天"}, {"char": "天", "ctx": "夏天"}, {"char": "秋", "ctx": "秋天"}, {"char": "天", "ctx": "秋天"}, {"char": "冬", "ctx": "冬天"}, {"char": "天", "ctx": "冬天"}, {"char": "住", "ctx": "住"}, {"char": "一", "ctx": "一間"}, {"char": "間", "ctx": "一間"}, {"char": "走", "ctx": "走進"}, {"char": "進", "ctx": "走進"}, {"char": "樹", "ctx": "樹"}, {"char": "怕", "ctx": "怕冷"}, {"char": "冷", "ctx": "怕冷"}, {"char": "最", "ctx": "最後"}, {"char": "後", "ctx": "最後"}, {"char": "綠", "ctx": "綠油油"}, {"char": "油", "ctx": "綠油油"}, {"char": "油", "ctx": "綠油油"}, {"char": "紅", "ctx": "紅艷艷"}, {"char": "艷", "ctx": "紅艷艷"}, {"char": "艷", "ctx": "紅艷艷"}, {"char": "香", "ctx": "香噴噴"}, {"char": "噴", "ctx": "香噴噴"}, {"char": "噴", "ctx": "香噴噴"}];
+let i=0,writer=null,record=[];
+const squaresEl=document.getElementById('squares');
+let canvases=[];
+function makeCanvas(){
+  const wrap=document.createElement('div');wrap.className='sqwrap';
+  const cv=document.createElement('canvas');cv.width=400;cv.height=400;cv.style.touchAction='none';
+  const ctx=cv.getContext('2d');ctx.lineWidth=12;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#2b6cb0';
+  let drawing=false,last=null;
+  function pos(e){const r=cv.getBoundingClientRect();return {x:(e.clientX-r.left)*(cv.width/r.width),y:(e.clientY-r.top)*(cv.height/r.height)};}
+  cv.addEventListener('pointerdown',e=>{drawing=true;last=pos(e);cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',e=>{if(!drawing)return;const p=pos(e);ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;});
+  cv.addEventListener('pointerup',()=>drawing=false);
+  cv.addEventListener('pointercancel',()=>drawing=false);
+  const btn=document.createElement('button');btn.textContent='清除';btn.className='warn';btn.onclick=()=>ctx.clearRect(0,0,cv.width,cv.height);
+  wrap.appendChild(cv);wrap.appendChild(document.createElement('br'));wrap.appendChild(btn);
+  squaresEl.appendChild(wrap);canvases.push(cv);
+}
+for(let k=0;k<3;k++)makeCanvas();
+function speak(){
+  const item=seq[i];
+  if('speechSynthesis' in window){
+    const u=new SpeechSynthesisUtterance(item.char);
+    u.lang='zh-HK';u.rate=0.8;u.pitch=1;
+    const vs=speechSynthesis.getVoices();
+    const v=vs.find(v=>v.lang==='zh-HK')||vs.find(v=>v.lang.startsWith('zh'));
+    if(v)u.voice=v;
+    speechSynthesis.cancel();speechSynthesis.speak(u);
+  }
+}
+function render(){
+  const item=seq[i];
+  document.getElementById('ctx').textContent='詞語／句子：'+item.ctx;
+  document.getElementById('bigchar').textContent=item.char;
+  const box=document.getElementById('target');box.innerHTML='';
+  writer=HanziWriter.create('target',item.char,{width:300,height:300,padding:10,strokeAnimationSpeed:1.2,delayBetweenStrokes:250,showOutline:true});
+  writer.loopCharacterAnimation();
+}
+function replay(){
+  const item=seq[i];const box=document.getElementById('target');box.innerHTML='';
+  writer=HanziWriter.create('target',item.char,{width:300,height:300,padding:10,strokeAnimationSpeed:1.2,delayBetweenStrokes:250,showOutline:true});
+  writer.loopCharacterAnimation();
+}
+function snapshot(){
+  const item=seq[i];
+  const copies=canvases.map(src=>{
+    const c=document.createElement('canvas');c.width=src.width;c.height=src.height;
+    c.getContext('2d').drawImage(src,0,0);return c;
+  });
+  record.push({char:item.char,ctx:item.ctx,copies:copies});
+  canvases.forEach(c=>{const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);});
+}
+function next(){snapshot();i=(i+1)%seq.length;render();}
+function prev(){snapshot();i=(i-1+seq.length)%seq.length;render();}
+function saveRecord(){
+  snapshot();
+  const cols=3,cellW=460,cellH=560,pad=30;
+  const rows=Math.ceil(record.length/cols);
+  const W=cols*cellW+pad*2,H=rows*cellH+pad*2+140;
+  const out=document.createElement('canvas');out.width=W;out.height=H;
+  const c=out.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,W,H);
+  c.fillStyle='#2b6cb0';c.font='bold 52px sans-serif';c.textAlign='center';
+  c.fillText('默書範圍　小朋友寫字紀錄',W/2,80);
+  c.font='30px sans-serif';c.fillStyle='#4a5568';
+  c.fillText('日期：'+new Date().toLocaleDateString('zh-HK'),W/2,130);
+  record.forEach((r,idx)=>{
+    const x=pad+(idx%cols)*cellW,y=160+Math.floor(idx/cols)*cellH;
+    c.strokeStyle='#63b3ed';c.lineWidth=4;c.strokeRect(x,y,cellW-20,cellH-20);
+    c.fillStyle='#2b6cb0';c.font='bold 100px sans-serif';c.textAlign='center';
+    c.fillText(r.char,x+(cellW-20)/2,y+120);
+    r.copies.forEach((cv,k)=>{
+      c.drawImage(cv,x+20+k*((cellW-60)/3),y+160,(cellW-60)/3,(cellW-60)/3);
+    });
+  });
+  const dataURL=out.toDataURL('image/png');
+  const link=document.createElement('a');link.download='默書紀錄.png';link.href=dataURL;link.click();
+  if(navigator.canShare){
+    out.toBlob(b=>{
+      const file=new File([b],'默書紀錄.png',{type:'image/png'});
+      if(navigator.canShare({files:[file]}))navigator.share({files:[file],title:'默書紀錄'}).catch(()=>{});
+    },'image/png');
+  }
+}
+render();
+</script></body></html>
